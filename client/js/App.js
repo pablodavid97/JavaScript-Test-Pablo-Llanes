@@ -39,41 +39,41 @@ class ListSelection {
     }
 }
 
+const app = document.querySelector(".app");
+const searchBar = document.getElementById("stateSearchBar");
+const clearBtn = document.getElementById("clearSearchBtn");
+
 const ENTER_KEY = "Enter";
 const UP_KEY = "ArrowUp";
 const DOWN_KEY = "ArrowDown";
 
-let newRequest = true;
+let newRequest = false;
 const listSelection = new ListSelection();
 
-// Autocomplete component
-const showStates = async (event) => {
-    let searchBar = document.getElementById("stateSearchBar");
-    let clearBtn = document.getElementById("clearSearchBtn");
+searchBar.addEventListener("keyup", event => {
     let searchTxtLen = searchBar.value.length;
 
     if (isKeyAlphaOrReturn(event)) {
         if (searchTxtLen >= 2) {
             makeSearchRequest();
         }
-
-        if (searchTxtLen == 0) {
+        else if (searchTxtLen == 0 && newRequest == true) {
             clearSearchInput();
         }
-
-        clearBtn.addEventListener("click", event => {
-            clearSearchInput()
-        });
     }
     else {
         arrowKeySelection(event, listSelection);
         selectStateOnEnter(event);
     }
-}
+});
+
+clearBtn.addEventListener("click", event => {
+    clearSearchInput()
+});
 
 // returns true when input key is alphanumeric or return character
 // this prevents from making unnecessary calls to API
-const isKeyAlphaOrReturn = (e) => {
+function isKeyAlphaOrReturn(e) {
     let flag = false;
 
     if (
@@ -86,16 +86,14 @@ const isKeyAlphaOrReturn = (e) => {
     return flag;
 }
 
-const makeSearchRequest = async () => {
+async function makeSearchRequest() {
     let resultsCount = 0;
     let resultsList = [];
-    let searchBar = document.getElementById("stateSearchBar");
-    let clearBtn = document.getElementById("clearSearchBtn");
 
     const resData = await getStatesJSON(searchBar.value);
     resultsCount = resData.count;
     resultsList = resData.data;
-    
+
     newRequest = true;
     clearBtn.style.display = "block";
 
@@ -115,16 +113,16 @@ const makeSearchRequest = async () => {
 }
 
 // aynchronous function that calls API to retrieve US States
-const getStatesJSON = async (searchValue) => {
+async function getStatesJSON(searchValue) {
     const response = await fetch(`http://localhost:3000/api/states?term=${searchValue}`);
     const states = await response.json();
     return states
 }
 
-const createStateList = (listSelectionObj, list) => {
+function createStateList(listSelectionObj, list) {
     let prevStateList = document.getElementById("stateList");
     let newStateList = document.createElement("UL");
-        
+
     if (prevStateList) {
         app.removeChild(prevStateList);
     }
@@ -146,9 +144,9 @@ const createStateList = (listSelectionObj, list) => {
     return newStateList
 }
 
-const setInputValueHover = (event) => {
-    let searchBar = document.getElementById("stateSearchBar");
-    let stateItem = getEventTarget(event)
+function setInputValueHover(event) {
+    let stateItem = getEventTarget(event);
+    let selectedState = null;
 
     if (stateItem.tagName == "LI") {
         selectedState = stateItem.innerHTML;
@@ -156,13 +154,10 @@ const setInputValueHover = (event) => {
     }
 }
 
-const setInputValueClick = (event) => {
-    let app = document.getElementById("app");
-    let searchBar = document.getElementById("stateSearchBar");
+function setInputValueClick(event) {
     let list = document.getElementById("stateList");
     let stateItem = getEventTarget(event);
-
-    selectedState = stateItem.innerHTML;
+    let selectedState = stateItem.innerHTML;
 
     if (list) {
         app.removeChild(list);
@@ -171,22 +166,19 @@ const setInputValueClick = (event) => {
 }
 
 // returns element that has been selected based on user interaction (used for list click and hover)
-const getEventTarget = (event) => {
+function getEventTarget(event) {
     event = event || window.event;
     return event.target || event.srcElement;
 }
 
-const displayNoResultsMessage = (message) => {
+function displayNoResultsMessage(message) {
     resultsMsg = message;
 
     console.log(resultsMsg);
 }
 
-const clearSearchInput = () => {
+function clearSearchInput() {
     let list = document.getElementById("stateList");
-    let searchBar = document.getElementById("stateSearchBar");
-    let clearBtn = document.getElementById("clearSearchBtn");
-
     searchBar.value = "";
 
     if (list) {
@@ -195,8 +187,7 @@ const clearSearchInput = () => {
     clearBtn.style.display = "none";
 }
 
-const arrowKeySelection = (event, listSelectionObj) => {
-    let searchBar = document.getElementById("stateSearchBar");
+function arrowKeySelection(event, listSelectionObj) {
     let list = document.getElementById("stateList");
     let items = null;
     let activeItem = document.getElementsByClassName("app__search-item--selected")
@@ -228,7 +219,7 @@ const arrowKeySelection = (event, listSelectionObj) => {
     }
 }
 
-const selectStateOnEnter = (event) => {
+function selectStateOnEnter(event) {
     let list = document.getElementById("stateList");
 
     if (event.code == ENTER_KEY) {
@@ -237,5 +228,3 @@ const selectStateOnEnter = (event) => {
         }
     }
 }
-
-window.showStates = showStates;

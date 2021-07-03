@@ -4,18 +4,18 @@
 	<title>Verndale Javascript Code Test</title>
 </head>
 <body>
-	<div id="app" class="app-container">
-		<!-- Autocomplete component -->
-		<h1 class="app-container__title">Verndale JavaScript Code Test</h1>
-		
-		<div class="app__search-container">
-			<input type="text" id="stateSearchBar" onkeyup="showStates(event)" placeholder="Search states">
-			<span id="clearSearchBtn" class="app__clear-btn">&times</span>
-		</div>
-
-		<ul id="stateList" class="app__search-list"></ul>
-	</div>
-
+	<main>
+		<section class="app">
+			<h1 class="app__title">Verndale JavaScript Code Test</h1>
+			
+			<div class="app__search-container">
+				<input type="text" id="stateSearchBar" class="app__search-bar" placeholder="Search states">
+				<span id="clearSearchBtn" class="app__clear-btn">&times</span>
+			</div>
+			<ul id="stateList" class="app__search-list"></ul>
+			
+		</section>
+	</main>
 	<script src='../dist/main-bundle.js'></script>
 </body>
 </html>
