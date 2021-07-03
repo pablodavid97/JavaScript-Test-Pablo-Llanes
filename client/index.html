@@ -1,0 +1,21 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Verndale Javascript Code Test</title>
+</head>
+<body>
+	<div id="app" class="app-container">
+		<!-- Autocomplete component -->
+		<h1 class="app-container__title">Verndale JavaScript Code Test</h1>
+		
+		<div class="app__search-container">
+			<input type="text" id="stateSearchBar" onkeyup="showStates(event)" placeholder="Search states">
+			<span id="clearSearchBtn" class="app__clear-btn">&times</span>
+		</div>
+
+		<ul id="stateList" class="app__search-list"></ul>
+	</div>
+
+	<script src='../dist/main-bundle.js'></script>
+</body>
+</html>

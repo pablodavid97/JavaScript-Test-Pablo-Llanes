@@ -1,0 +1,82 @@
+@import "reset";
+
+body,
+html {
+	font-weight: normal;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.app-container {
+	text-align: center;
+}
+
+.app-container__title {
+	font-weight: 700;
+	font-size: 1.8em;
+	margin: 2em 0;
+}
+
+/* Search bar*/
+#stateSearchBar {
+	height: 50px;
+	width: 35vw;
+	font-size: 1.3em;
+	position: relative;
+	z-index: 10;
+	padding: 1.5rem;
+}
+
+::placeholder { 
+	color: #b9b9b9;
+}
+
+.app__search-list {
+	height: fit-content;
+	max-height: 17rem;
+	margin-top: -0.5rem;
+	width: 35vw;
+	border: 1px solid #696969;
+	padding-top: 1.2rem;
+	text-align: left;
+	border-radius: 10px;
+	font-size: 1.3rem;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	position: absolute;
+	z-index: 5;
+	left: 32.5vw;
+	display: none;
+}
+
+/* Search items */
+.app__search-item {
+	padding: 1rem;
+}
+
+.app__search-item:hover {
+	background-color: #6ee8fd;
+}
+
+.app__search-item--selected {
+	background-color: #6ee8fd;
+}
+
+.app__clear-btn {
+	position: absolute;
+  z-index: 30;
+  top: 9.5rem;
+  right: 34vw;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
+  padding: 0.5rem;
+  font-size: 1.3rem;
+	font-weight: 800;
+	line-height: 0.75;
+  background-color: #c3c3c3;
+	display: none;
+}
+
+.app__clear-btn:hover {
+	background-color: #dadada;
+}
