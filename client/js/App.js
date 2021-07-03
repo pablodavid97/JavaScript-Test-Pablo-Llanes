@@ -39,7 +39,7 @@ class ListSelection {
     }
 }
 
-const app = document.querySelector(".app");
+const searchContainer = document.querySelector(".app__search-container");
 const searchBar = document.getElementById("stateSearchBar");
 const clearBtn = document.getElementById("clearSearchBtn");
 
@@ -50,10 +50,10 @@ const DOWN_KEY = "ArrowDown";
 let newRequest = false;
 const listSelection = new ListSelection();
 
-searchBar.addEventListener("keyup", event => {
+searchBar.addEventListener("keyup", e => {
     let searchTxtLen = searchBar.value.length;
 
-    if (isKeyAlphaOrReturn(event)) {
+    if (isKeyAlphaOrReturn(e)) {
         if (searchTxtLen >= 2) {
             makeSearchRequest();
         }
@@ -62,14 +62,12 @@ searchBar.addEventListener("keyup", event => {
         }
     }
     else {
-        arrowKeySelection(event, listSelection);
-        selectStateOnEnter(event);
+        arrowKeySelection(e, listSelection);
+        selectStateOnEnter(e);
     }
 });
 
-clearBtn.addEventListener("click", event => {
-    clearSearchInput()
-});
+clearBtn.addEventListener("click", clearSearchInput);
 
 // returns true when input key is alphanumeric or return character
 // this prevents from making unnecessary calls to API
@@ -95,17 +93,19 @@ async function makeSearchRequest() {
     resultsList = resData.data;
 
     newRequest = true;
-    clearBtn.style.display = "block";
+    clearBtn.style.display = "flex";
+    clearBtn.style.justifyContent = "center";
+    clearBtn.style.alignItems = "center";
 
     if (resultsCount > 0) {
         let stateList = createStateList(listSelection, resultsList);
 
-        stateList.addEventListener("mouseover", event => {
-            setInputValueHover(event)
+        stateList.addEventListener("mouseover", e => {
+            setInputValueHover(e)
         });
 
-        stateList.addEventListener("click", event => {
-            setInputValueClick(event)
+        stateList.addEventListener("click", e => {
+            setInputValueClick(e)
         });
     } else {
         displayNoResultsMessage(resData.message);
@@ -124,12 +124,12 @@ function createStateList(listSelectionObj, list) {
     let newStateList = document.createElement("UL");
 
     if (prevStateList) {
-        app.removeChild(prevStateList);
+        searchContainer.removeChild(prevStateList);
     }
     newStateList.id = "stateList";
     newStateList.classList.add("app__search-list");
     newStateList.style.display = "block";
-    app.appendChild(newStateList);
+    searchContainer.appendChild(newStateList);
 
     listSelectionObj.setLimits(0, list.length);
 
@@ -144,8 +144,8 @@ function createStateList(listSelectionObj, list) {
     return newStateList
 }
 
-function setInputValueHover(event) {
-    let stateItem = getEventTarget(event);
+function setInputValueHover(e) {
+    let stateItem = getEventTarget(e);
     let selectedState = null;
 
     if (stateItem.tagName == "LI") {
@@ -154,26 +154,25 @@ function setInputValueHover(event) {
     }
 }
 
-function setInputValueClick(event) {
+function setInputValueClick(e) {
     let list = document.getElementById("stateList");
-    let stateItem = getEventTarget(event);
+    let stateItem = getEventTarget(e);
     let selectedState = stateItem.innerHTML;
 
     if (list) {
-        app.removeChild(list);
+        searchContainer.removeChild(list);
     }
     searchBar.value = selectedState;
 }
 
 // returns element that has been selected based on user interaction (used for list click and hover)
-function getEventTarget(event) {
-    event = event || window.event;
-    return event.target || event.srcElement;
+function getEventTarget(e) {
+    e = e || window.e;
+    return e.target || e.srcElement;
 }
 
 function displayNoResultsMessage(message) {
     resultsMsg = message;
-
     console.log(resultsMsg);
 }
 
@@ -182,17 +181,17 @@ function clearSearchInput() {
     searchBar.value = "";
 
     if (list) {
-        app.removeChild(list);
+        searchContainer.removeChild(list);
     }
     clearBtn.style.display = "none";
 }
 
-function arrowKeySelection(event, listSelectionObj) {
+function arrowKeySelection(e, listSelectionObj) {
     let list = document.getElementById("stateList");
     let items = null;
     let activeItem = document.getElementsByClassName("app__search-item--selected")
     let selectedItem = null;
-    let eventCode = event.code;
+    let eventCode = e.code;
 
     if (eventCode == UP_KEY || eventCode == DOWN_KEY) {
         if (newRequest) {
@@ -219,10 +218,10 @@ function arrowKeySelection(event, listSelectionObj) {
     }
 }
 
-function selectStateOnEnter(event) {
+function selectStateOnEnter(e) {
     let list = document.getElementById("stateList");
 
-    if (event.code == ENTER_KEY) {
+    if (e.code == ENTER_KEY) {
         if (list) {
             list.parentElement.removeChild(list);
         }
